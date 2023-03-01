@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>网易云注册</title>
+    <link
+      rel="icon"
+      href="https://img2.baidu.com/it/u=940459549,1940541638&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500"
+    />
+    <link rel="stylesheet" href="../config/layui/css/layui.css" />
+    <link rel="stylesheet" href="../styles/pages/register.css" />
+  </head>
+  <body>
+    <h1 class="center">网易云音乐</h1>
+    <div class="main center">
+      <h2>注册账号</h2>
+
+      <form class="form">
+        <div class="form-item item-phone center">
+          <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-primary demo1">
+              <span class="qh">+86</span>
+              <i class="layui-icon layui-icon-down layui-font-12"></i>
+            </button>
+          </div>
+          <input type="text" class="phone-ipt" />
+          <label class="phone-label" for="">请输入手机号码</label>
+        </div>
+
+        <div class="form-item item-captcha center">
+          <input type="text" class="captcha-ipt" />
+          <label class="captcha-label" for="">请输入验证码</label>
+          <button class="get-captcha">获取验证码</button>
+        </div>
+        <div class="form-item item-pwd center">
+          <input type="password" class="pwd-ipt" />
+          <label class="pwd-label" for="">请输入密码</label>
+        </div>
+        <div class="form-item item-nick center">
+          <input type="text" class="nick-ipt" />
+          <label class="nick-label" for="">请输入昵称</label>
+        </div>
+
+        <button class="register center">注册</button>
+      </form>
+      <a class="toLogin" href="./login.html">已有账号,去登录</a>
+    </div>
+
+    <script src="../config/layui/layui.js"></script>
+    <script src="../config/jquery.min.js"></script>
+    <script src="../config/axios.min.js"></script>
+    <script src="../js/register.js" type="module"></script>
+  </body>
+</html>

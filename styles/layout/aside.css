@@ -1,0 +1,94 @@
+@import '../global/normalize.css';
+:root {
+  --main-color: #e83c3c;
+  --theme-bg: #585e6b;
+  --text-color: #515a6e;
+  --green-bg: #3eb874;
+  --green-menu-bg: #f9f9f9;
+  --green-footer-bg: #f6f6f8;
+  --dark-header-bg: #202023;
+  --dark-active-color: #b82525;
+  --dark-text-color: #ccc;
+  --dark-main-color: #fff;
+  --dark-menu-bg: #191b1f;
+  --dark-footer-bg: #212124;
+  --dark-body-bg: #16181c;
+}
+.theme-green-menu {
+  background-color: var(--green-menu-bg);
+}
+.theme-dark-menu {
+  background-color: var(--dark-menu-bg);
+}
+.theme-dark-text {
+  color: var(--dark-text-color);
+}
+.theme-dark-active-text {
+  color: var(--dark-active-color);
+}
+aside {
+  width: 260px;
+  height: 100vh;
+}
+aside .menu-list {
+  width: 100%;
+  height: auto;
+  padding-left: 2px;
+}
+aside .menu-list li {
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  align-items: center;
+  border-left: 3px solid transparent;
+  transition: 0.2s;
+  cursor: pointer;
+}
+aside .menu-list li i {
+  margin-left: 20px;
+  margin-right: 10px;
+}
+aside .menu-list .clickGreenItem {
+  border-left: 3px solid #3eb874;
+  padding-left: 6px;
+}
+aside .menu-list .clickGreenItem i {
+  margin-left: 25px;
+}
+aside .menu-list .clickGreenItem i,
+aside .menu-list .clickGreenItem span {
+  color: #3eb874;
+}
+aside .menu-list .hoverGreenItem {
+  border-left: 3px solid #3eb874;
+  padding-left: 6px;
+}
+aside .menu-list .hoverGreenItem i {
+  margin-left: 25px;
+}
+aside .menu-list .hoverGreenItem i,
+aside .menu-list .hoverGreenItem span {
+  color: #3eb874;
+}
+aside .menu-list .clickDarkItem {
+  border-left: 3px solid #b82525;
+  padding-left: 6px;
+}
+aside .menu-list .clickDarkItem i {
+  margin-left: 25px;
+}
+aside .menu-list .clickDarkItem i,
+aside .menu-list .clickDarkItem span {
+  color: #b82525;
+}
+aside .menu-list .hoverDarkItem {
+  border-left: 3px solid #b82525;
+  padding-left: 6px;
+}
+aside .menu-list .hoverDarkItem i {
+  margin-left: 25px;
+}
+aside .menu-list .hoverDarkItem i,
+aside .menu-list .hoverDarkItem span {
+  color: #b82525;
+}

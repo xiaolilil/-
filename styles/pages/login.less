@@ -1,0 +1,319 @@
+// 导入公共less文件
+@import '../global/mixins.less';
+@import '../global/normalize.css';
+@import '../global/variable.less';
+
+body {
+  background-color: @primary-bg;
+}
+
+h1 {
+  .wh(400px, 100px, center);
+  font-size: 55px;
+  letter-spacing: 5px;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(to right, red, #f50, #0fa, magenta, #c4f);
+}
+
+.main {
+  width: 450px;
+  height: 400px;
+  margin-top: 70px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #ddd;
+  position: relative;
+
+  >.title {
+    .flex(@just: center);
+    height: 70px;
+    border-bottom: 2px solid #999;
+
+    span {
+      margin: 0 30px;
+      font-weight: bold;
+      font-size: 20px;
+      border-bottom: 5px solid transparent;
+      padding-bottom: 5px;
+      cursor: pointer;
+    }
+
+    .activeTitle {
+      color: @btn-bd;
+      border-color: @btn-bd;
+    }
+  }
+
+  .form-box {
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .toRegister {
+    position: absolute;
+    bottom: 15px;
+    left: 20px;
+
+    &:hover a {
+      text-decoration: underline;
+      color: @btn-bd;
+    }
+  }
+
+  .qr {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 52px;
+    height: 52px;
+    border-bottom-right-radius: 35px;
+    cursor: pointer;
+  }
+}
+
+.form-phone {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  padding-top: 40px;
+  transition: .5s;
+
+  .form-item {
+    width: 280px;
+    height: 38px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+
+    &:first-child {
+      margin-bottom: 30px;
+    }
+
+    .layui-btn-container {
+      width: 90px !important;
+
+      .layui-btn {
+        border-radius: 19px 0 0 19px;
+        border-right: none;
+      }
+    }
+
+    .qh {
+      display: inline-block;
+      width: 35px;
+    }
+
+    .phone-ipt {
+      width: 190px;
+      border-radius: 0 19px 19px 0;
+    }
+
+    input {
+      background-color: transparent;
+      border: 1px solid #ddd;
+      padding-left: 15px;
+      height: 38px;
+      position: relative;
+      z-index: 1;
+    }
+
+
+
+    label {
+      position: absolute;
+      left: 100px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: cornflowerblue;
+
+      display: flex;
+
+      span {
+        color: cornflowerblue;
+        min-width: 5px;
+        transition: 0.3s cubic-bezier(0.68, 0.55, 0.265, 1.55);
+        transform: translateY(0);
+      }
+
+      .haveVal {
+        transform: translateY(-30px);
+      }
+    }
+
+    .qr-ipt {
+      border-radius: 19px;
+      width: 150px;
+    }
+
+
+    .qr-label {
+      left: 15px;
+      justify-content: space-between;
+    }
+
+    .pwd-ipt {
+      width: 280px;
+      border-radius: 19px;
+    }
+
+
+
+    .get-qr {
+      width: 100px;
+      height: 38px;
+      border-radius: 19px;
+      background-color: @btn-bd;
+      color: #fff;
+      cursor: pointer;
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+
+    .not-allow {
+      cursor: not-allowed;
+    }
+  }
+
+  .item-captcha {
+    margin-bottom: 10px;
+  }
+
+  .item-pwd {
+    display: none;
+    margin-bottom: 10px;
+
+    label {
+      left: 15px;
+    }
+  }
+
+  .form-other {
+    width: 280px;
+    height: 30px;
+    .flex;
+    margin-bottom: 20px;
+
+    span {
+      cursor: pointer;
+
+      &:hover {
+        color: blue;
+      }
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      visibility: hidden;
+    }
+
+    #rememberPwd {
+      width: 15px;
+      height: 15px;
+      margin-left: 10px;
+    }
+  }
+
+  input:focus {
+    border-color: @btn-bd !important;
+  }
+
+  .login {
+    width: 280px;
+    height: 38px;
+    background-color: @btn-bd;
+    color: #fff;
+    border-radius: 19px;
+    display: block;
+    cursor: pointer;
+
+    &:hover {
+      opacity: .7;
+    }
+  }
+}
+
+.form-item input:focus+label span {
+  transform: translateY(-30px);
+  transition: 0.3s cubic-bezier(0.68, 0.55, 0.265, 1.55);
+}
+
+
+.form-qr {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 100%;
+  transition: .5s;
+  padding: 40px;
+  .flex;
+
+  img {
+    width: 125px;
+    height: 220px;
+  }
+
+  .qr-box {
+    width: 200px;
+    height: 220px;
+
+    .title {
+      text-align: center;
+      height: 25px;
+      line-height: 25px;
+      font-size: 18px;
+    }
+
+    .qr-canvas {
+      position: relative;
+      .flex(@dir: column, @just: center);
+      margin-bottom: 5px;
+
+      .canvas-tips {
+        position: absolute;
+        background-color: rgba(255, 255, 255, 0.843);
+        width: 140px;
+        height: 160px;
+        display: none;
+
+        .qr-text {
+          position: absolute;
+          top: 50px;
+          left: 50%;
+          transform: translateX(-50%);
+          padding: 3px 6px;
+          color: black;
+        }
+
+        button {
+          position: absolute;
+          top: 80px;
+          left: 50%;
+          transform: translateX(-48%);
+          width: 80px;
+          padding: 5px 10px;
+          color: #fff;
+          cursor: pointer;
+          background-color: rgb(18, 185, 54);
+        }
+      }
+
+
+
+    }
+
+    .tips {
+      text-align: center;
+
+      span {
+        color: @btn-bd;
+      }
+    }
+
+  }
+}

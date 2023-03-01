@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles//layout/footer.css" />
+  </head>
+  <body>
+    <footer class="theme-green-footer"></footer>
+
+    <script src="../config/jquery.min.js"></script>
+    <script type="module">
+      import { addClass, removeClass } from "../utils/setClass.js";
+      // 获取父页面传递来的数据
+      window.addEventListener("message", function (e) {
+        const { data } = e;
+        // console.log("data", data);
+        if (data == "green") {
+          removeClass("theme-dark-footer");
+          addClass("footer", "theme-green-footer");
+        } else if (data == "dark") {
+          removeClass("theme-green-footer");
+          addClass("footer", "theme-dark-footer");
+        }
+      });
+    </script>
+  </body>
+</html>

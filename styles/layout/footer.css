@@ -1,0 +1,27 @@
+@import '../global/normalize.css';
+:root {
+  --main-color: #e83c3c;
+  --theme-bg: #585e6b;
+  --text-color: #515a6e;
+  --green-bg: #3eb874;
+  --green-menu-bg: #eddddd;
+  --green-footer-bg: #a6a6c0;
+  --green-body-bg: #f5f5f5;
+  --dark-header-bg: #202023;
+  --dark-active-color: #b82525;
+  --dark-text-color: #ccc;
+  --dark-main-color: #fff;
+  --dark-menu-bg: #191b1f;
+  --dark-footer-bg: #212124;
+  --dark-body-bg: #16181c;
+}
+.theme-green-footer {
+  background-color: var(--green-footer-bg);
+}
+.theme-dark-footer {
+  background-color: var(--dark-footer-bg);
+}
+footer {
+  height: 60px;
+  width: 100%;
+}

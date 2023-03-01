@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/components/newMusic.css" />
+    <link
+      rel="stylesheet"
+      href="//at.alicdn.com/t/c/font_3788370_o463lg1abx8.css"
+    />
+  </head>
+  <body>
+    <div class="newMusic"></div>
+
+    <script src="../config/jquery.min.js"></script>
+    <script src="./js/newMusic.js" type="module"></script>
+    <script>
+      function renderNewMusic(data) {
+        $(".newMusic").html(render(data));
+      }
+
+      function render(data) {
+        return `
+        <h3>最新音乐</h3>
+        <ul class="newMusic-content">
+          ${data
+            .map((item, idx) => {
+              return `
+                <li class="item" data-id="${item.id}">
+                  <span class="index">${idx + 1}</span>
+                  <div class="img">
+                    <img src="${item.picUrl}" alt="" />
+                    <i class="iconfont icon-24gf-play"></i>
+                  </div>
+                  <div class="item-info">
+                    <p>${item.name}</p>
+                    <p>${item.song.album.company}</p>
+                  </div>
+                </li>
+              `;
+            })
+            .join("")}
+        </ul>
+        `;
+      }
+    </script>
+  </body>
+</html>

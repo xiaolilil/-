@@ -1,0 +1,12 @@
+@import '../global/normalize.css';
+:root {
+  --green-bg: #3eb874;
+  --menu-bg: #f9f9f9;
+  --green-footer-bg: #f6f6f8;
+  --dark-header-bg: #202023;
+  --theme-bg: #585e6b;
+  --dark-active-color: #b82525;
+  --dark-text-color: #ccc;
+  --dark-main-color: #fff;
+  --text-color: #515a6e;
+}

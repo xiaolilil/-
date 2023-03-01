@@ -1,0 +1,108 @@
+// 导入公共less文件
+@import '../global/mixins.less';
+@import '../global/normalize.css';
+@import '../global/variable.less';
+
+
+.theme-green-menu {
+  background-color: var(--green-menu-bg);
+}
+
+.theme-dark-menu {
+  background-color: var(--dark-menu-bg);
+}
+
+.theme-dark-text {
+  color: var(--dark-text-color);
+}
+
+.theme-dark-active-text {
+  color: var(--dark-active-color);
+}
+
+aside {
+  width: 260px;
+  height: 100vh;
+
+  .menu-list {
+    width: 100%;
+    height: auto;
+    padding-left: 2px;
+
+    li {
+      height: 50px;
+      line-height: 50px;
+      display: flex;
+      align-items: center;
+      border-left: 3px solid transparent;
+      transition: 0.2s;
+      cursor: pointer;
+
+      i {
+
+        margin-left: 20px;
+        margin-right: 10px;
+      }
+    }
+
+
+    .clickGreenItem {
+      border-left: 3px solid #3eb874;
+      padding-left: 6px;
+
+      i {
+        margin-left: 25px;
+      }
+
+      i,
+      span {
+        color: #3eb874;
+      }
+    }
+
+
+    .hoverGreenItem {
+      border-left: 3px solid #3eb874;
+      padding-left: 6px;
+
+      i {
+        margin-left: 25px;
+      }
+
+      i,
+      span {
+        color: #3eb874;
+      }
+    }
+
+    .clickDarkItem {
+      border-left: 3px solid #b82525;
+      padding-left: 6px;
+
+      i {
+        margin-left: 25px;
+      }
+
+      i,
+      span {
+        color: #b82525;
+      }
+    }
+
+
+    .hoverDarkItem {
+      border-left: 3px solid #b82525;
+      padding-left: 6px;
+
+      i {
+        margin-left: 25px;
+      }
+
+      i,
+      span {
+        color: #b82525;
+      }
+    }
+
+  }
+}

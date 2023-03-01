@@ -1,0 +1,162 @@
+// 导入公共less文件
+@import '../global/mixins.less';
+@import '../global/normalize.css';
+@import '../global/variable.less';
+
+body {
+  background-color: @primary-bg;
+}
+
+h1 {
+  .wh(400px, 100px, center);
+  font-size: 55px;
+  letter-spacing: 5px;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(to right, red, #f50, #0fa, magenta, #c4f);
+}
+
+.main {
+  width: 450px;
+  height: 420px;
+  margin-top: 50px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #ddd;
+  position: relative;
+
+  h2 {
+    text-align: center;
+    line-height: 60px;
+    color: #c4f;
+    font-size: 23px;
+    letter-spacing: 6px;
+    border-bottom: 1px solid #999;
+  }
+
+  .form {
+    width: 100%;
+    height: 350px;
+    padding-top: 20px;
+
+    .form-item {
+      width: 280px;
+      height: 38px;
+      margin-bottom: 23px;
+      position: relative;
+    }
+
+    .item-phone {
+      display: flex;
+
+      input {
+        width: 190px;
+        border-radius: 0 19px 19px 0;
+      }
+
+      label {
+        left: 105px;
+      }
+    }
+
+    .item-captcha {
+      .flex;
+
+      input {
+        width: 150px;
+      }
+
+      .get-captcha {
+        width: 100px;
+        height: 38px;
+      }
+
+      .not-allow {
+        cursor: not-allowed;
+      }
+    }
+
+    .register {
+      width: 280px;
+
+      display: block;
+    }
+  }
+
+  .toLogin {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+
+    &:hover {
+      text-decoration: underline;
+      color: blue;
+    }
+  }
+}
+
+button {
+  cursor: pointer;
+  height: 38px;
+  border-radius: 19px;
+  background-color: @btn-bd;
+  color: #fff;
+
+  &:hover {
+    opacity: .7;
+  }
+}
+
+input {
+  width: 280px;
+  height: 38px;
+  padding-left: 12px;
+  z-index: 1;
+  background-color: transparent;
+  border: 1px solid #999;
+  border-radius: 19px;
+
+  &:focus {
+    border-color: @btn-bd;
+  }
+}
+
+label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  display: flex;
+
+  span {
+    color: cornflowerblue;
+    min-width: 5px;
+    transition: 0.3s cubic-bezier(0.68, 0.55, 0.265, 1.55);
+    transform: translateY(0);
+  }
+
+  .haveVal {
+    transform: translateY(-30px);
+  }
+}
+
+.form-item input:focus+label span {
+  transform: translateY(-30px);
+  transition: 0.3s cubic-bezier(0.68, 0.55, 0.265, 1.55);
+}
+
+.layui-btn-container .layui-btn {
+  margin: 0;
+  border-right: none;
+  border-radius: 19px 0 0 19px;
+}
+
+.qh {
+  display: inline-block;
+  width: 35px;
+}
+
+label {
+  color: cornflowerblue;
+
+}

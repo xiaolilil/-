@@ -1,0 +1,32 @@
+// 宽 高 行高 文本
+.wh(@w, @h, @text: left) {
+  width: @w;
+  height: @h;
+  line-height: @h;
+  text-align: @text;
+}
+
+// 背景图
+.bg(@repeat: no-repeat, @w, @h, @x, @y) {
+  background-repeat: @repeat;
+  background-size: @w @h;
+  background-position: @x @y;
+}
+
+// flex   单轴
+.flex(@dir: row, @just: space-between, @align: center, @wrap: wrap) {
+  display: flex;
+  flex-direction: @dir;
+  flex-wrap: @wrap;
+  justify-content: @just;
+  align-items: @align;
+}
+
+// flex  多轴
+.flex2(@dir: row, @just: space-between, @align: space-between, @wrap: wrap) {
+  display: flex;
+  flex-direction: @dir;
+  flex-wrap: @wrap;
+  justify-content: @just;
+  align-content: @align;
+}

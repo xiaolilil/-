@@ -1,0 +1,81 @@
+@import '../global/normalize.css';
+:root {
+  --tag-color: #0c73c2;
+  --main-color: #e83c3c;
+  --text-color: #515a6e;
+  --green-bg: #3eb874;
+  --green-menu-bg: #eddddd;
+  --green-footer-bg: #d3d3e3;
+  --green-body-bg: #f5f5f5;
+  --table-bg: #e7e9ef;
+  --green-theme-bg: #f6f6f6;
+  --green-text: #000;
+  --dark-header-bg: #202023;
+  --dark-active-color: #b82525;
+  --dark-text-color: #ccc;
+  --dark-main-color: #fff;
+  --dark-menu-bg: #191b1f;
+  --dark-footer-bg: #212124;
+  --dark-body-bg: #16181c;
+  --dark-table-even: #16181c;
+  --dark-table-odd: #1a1c20;
+  --dark-table-color: #fff;
+  --dark-theme-bg: #585e6b;
+}
+.theme-green h3 {
+  color: var(--green-text);
+}
+.theme-green .item-text {
+  color: var(--green-text);
+}
+.theme-dark h3 {
+  color: var(--dark-main-color);
+}
+.theme-dark .item-text {
+  color: var(--dark-main-color);
+}
+.private {
+  width: 100%;
+  height: 220px;
+}
+.private h3 {
+  height: 50px;
+  line-height: 50px;
+  font-size: 18px;
+}
+.private .private-content {
+  height: 170px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.private .private-content .item {
+  width: 320px;
+  height: 160px;
+}
+.private .private-content .item .item-top {
+  width: 100%;
+  height: 120px;
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.private .private-content .item .item-top img {
+  width: 100%;
+  height: 120px;
+  position: absolute;
+  z-index: -1;
+}
+.private .private-content .item .item-top i {
+  color: #fff;
+  font-size: 22px;
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+.private .private-content .item .item-text {
+  margin-top: 5px;
+  font-size: 14px;
+}

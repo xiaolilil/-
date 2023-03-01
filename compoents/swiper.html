@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../config/swiper/swiper-bundle.min.css" />
+    <style>
+      .swiper-container {
+        width: 80%;
+        height: 200px;
+      }
+      .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        height: 180px;
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+      }
+      .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <script src="../config/jquery.min.js"></script>
+    <script src="../config/swiper/swiper-bundle.min.js"></script>
+    <script>
+      const swiper = new Swiper(".swiper", {
+        slidesPerView: 1,
+        // spaceBetween: 30,
+        // centeredSlides: true,
+        loop: true,
+        autoplay: {
+          delay: 2500,
+          disableOnInteraction: false,
+        },
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+
+      /**
+       * @description: 渲染轮播图
+       * @param {*} data 轮播图的数据
+       * @return {*}
+       */
+      function renderSwiper(data) {
+        $(".swiper-wrapper").html(
+          data
+            .map((item, index) => {
+              return `
+              <div class="swiper-slide"  data-swiper-slide-index="${
+                index + 1
+              }" aria-label="${index + 1} / ${data.length}">
+                <img src="${item.imageUrl}">
+              </div>
+            `;
+            })
+            .join("")
+        );
+      }
+    </script>
+  </body>
+</html>

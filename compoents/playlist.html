@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles/components/playlist.css" />
+    <link
+      rel="stylesheet"
+      href="//at.alicdn.com/t/c/font_3788370_o463lg1abx8.css"
+    />
+  </head>
+  <body>
+    <div class="playlist-box"></div>
+
+    <script src="../config/jquery.min.js"></script>
+    <script src="./js/playlist.js" type="module"></script>
+    <script>
+      function renderPlayList(data) {
+        $(".playlist-box").html(render(data));
+      }
+
+      function render(data) {
+        return `
+        <h3>推荐歌单</h3>
+        <div class="playlist">
+          ${data
+            .map(i => {
+              return `
+          <div data-id="${i.id}" class="item" >
+            <div class="item-poster" >
+              <img src="${i.picUrl}">
+              <p><i class="iconfont icon-erji"></i><span>${i.playCount}</span></p>
+              <i class="iconfont icon-24gf-play"></i>
+            </div>
+            <p class="name">${i.name}</p>
+          </div>
+          `;
+            })
+            .join("")}
+        </div>
+        `;
+      }
+
+      function renderThen() {
+        const els = $("img");
+        let promiseAll = [];
+        for (let i = 0; i < els.length; i++) {
+          promiseAll[i] = new Promise((resolve, reject) => {
+            // console.log("window.parent", window.parent);
+            window.parent.postMessage("loading-fadeIn", "*");
+            els[i].onload = function () {
+              //第i张加载完成
+              resolve(els[i]);
+            };
+          });
+        }
+
+        Promise.all(promiseAll).then(els => {
+          console.log("222", 222);
+          //全部加载完成
+          window.parent.postMessage("loading-fadeOut", "*");
+        });
+        // }
+      }
+    </script>
+  </body>
+</html>

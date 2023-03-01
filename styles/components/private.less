@@ -1,0 +1,75 @@
+// 导入公共less文件
+@import '../global/mixins.less';
+@import '../global/normalize.css';
+@import '../global/variable.less';
+
+
+.theme-green {
+  h3 {
+    color: var(--green-text);
+  }
+
+  .item-text {
+    color: var(--green-text);
+  }
+}
+
+
+.theme-dark {
+  h3 {
+    color: var(--dark-main-color);
+  }
+
+  .item-text {
+    color: var(--dark-main-color);
+  }
+}
+
+.private {
+  width: 100%;
+  height: 220px;
+
+  h3 {
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+  }
+
+  .private-content {
+    height: 170px;
+    .flex;
+
+    .item {
+      width: 320px;
+      height: 160px;
+
+      .item-top {
+        width: 100%;
+        height: 120px;
+        position: relative;
+        border-radius: 5px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 120px;
+          position: absolute;
+          z-index: -1;
+        }
+
+        i {
+          color: #fff;
+          font-size: 22px;
+          display: inline-block;
+          margin-left: 10px;
+          margin-top: 5px;
+        }
+      }
+
+      .item-text {
+        margin-top: 5px;
+        font-size: 14px;
+      }
+    }
+  }
+}

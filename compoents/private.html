@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles//components/private.css" />
+    <link
+      rel="stylesheet"
+      href="//at.alicdn.com/t/c/font_3788370_o463lg1abx8.css"
+    />
+  </head>
+  <body>
+    <div class="private"></div>
+
+    <script src="../config/jquery.min.js"></script>
+    <script src="./js/private.js" type="module"></script>
+
+    <script>
+      function renderPrivate(data) {
+        $(".private").html(render(data));
+      }
+
+      function render(data) {
+        return `
+        <h3>独家放送</h3>
+        <div class="private-content">
+          ${data
+            .map(i => {
+              return `
+              <div class="item" data-id="${i.id}">
+                <div class="item-top">
+                  <img src="${i.picUrl}" alt="" />
+                  <i class="iconfont icon-vrbofangqi"></i>
+                </div>
+                <p class="item-text">${i.copywriter}</p>
+              </div>
+            `;
+            })
+            .join("")}
+        </div>
+        `;
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+目录
+pages      所有的页面
+components 所有公共的页面区域
+layout     布局区域  header  footer  menu
+js         项目的js
+styles     项目的样式
+api        项目的所有网络请求接口
+utils      项目的工具函数
+config     项目的依赖文件  layui  swiper  axios  jquery
+assets     项目的所有静态资源 图片 图标
+
+
+安装依赖文件 
+npm i axios
+npm i jquery
+npm i layui
+npm i swiper
+npm i md5
+npm i normalize.css
+
+
+global 全局样式写好 less 混合器  变量

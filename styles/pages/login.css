@@ -1,0 +1,284 @@
+@import '../global/normalize.css';
+:root {
+  --green-bg: #3eb874;
+  --menu-bg: #f9f9f9;
+  --dark-header-bg: #202023;
+  --theme-bg: #585e6b;
+  --dark-active-color: #b82525;
+  --dark-text-color: #ccc;
+  --dark-main-color: #fff;
+}
+body {
+  background-color: #2d2d2d;
+}
+h1 {
+  width: 400px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  font-size: 55px;
+  letter-spacing: 5px;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(to right, red, #f50, #0fa, magenta, #c4f);
+}
+.main {
+  width: 450px;
+  height: 400px;
+  margin-top: 70px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #ddd;
+  position: relative;
+}
+.main > .title {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+  border-bottom: 2px solid #999;
+}
+.main > .title span {
+  margin: 0 30px;
+  font-weight: bold;
+  font-size: 20px;
+  border-bottom: 5px solid transparent;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+.main > .title .activeTitle {
+  color: #C20C0C;
+  border-color: #C20C0C;
+}
+.main .form-box {
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+.main .toRegister {
+  position: absolute;
+  bottom: 15px;
+  left: 20px;
+}
+.main .toRegister:hover a {
+  text-decoration: underline;
+  color: #C20C0C;
+}
+.main .qr {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 52px;
+  height: 52px;
+  border-bottom-right-radius: 35px;
+  cursor: pointer;
+}
+.form-phone {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  padding-top: 40px;
+  transition: 0.5s;
+}
+.form-phone .form-item {
+  width: 280px;
+  height: 38px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.form-phone .form-item:first-child {
+  margin-bottom: 30px;
+}
+.form-phone .form-item .layui-btn-container {
+  width: 90px !important;
+}
+.form-phone .form-item .layui-btn-container .layui-btn {
+  border-radius: 19px 0 0 19px;
+  border-right: none;
+}
+.form-phone .form-item .qh {
+  display: inline-block;
+  width: 35px;
+}
+.form-phone .form-item .phone-ipt {
+  width: 190px;
+  border-radius: 0 19px 19px 0;
+}
+.form-phone .form-item input {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  padding-left: 15px;
+  height: 38px;
+  position: relative;
+  z-index: 1;
+}
+.form-phone .form-item label {
+  position: absolute;
+  left: 100px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: cornflowerblue;
+  display: flex;
+}
+.form-phone .form-item label span {
+  color: cornflowerblue;
+  min-width: 5px;
+  transition: 0.3s cubic-bezier(0.68, 0.55, 0.265, 1.55);
+  transform: translateY(0);
+}
+.form-phone .form-item label .haveVal {
+  transform: translateY(-30px);
+}
+.form-phone .form-item .qr-ipt {
+  border-radius: 19px;
+  width: 150px;
+}
+.form-phone .form-item .qr-label {
+  left: 15px;
+  justify-content: space-between;
+}
+.form-phone .form-item .pwd-ipt {
+  width: 280px;
+  border-radius: 19px;
+}
+.form-phone .form-item .get-qr {
+  width: 100px;
+  height: 38px;
+  border-radius: 19px;
+  background-color: #C20C0C;
+  color: #fff;
+  cursor: pointer;
+}
+.form-phone .form-item .get-qr:hover {
+  opacity: 0.7;
+}
+.form-phone .form-item .not-allow {
+  cursor: not-allowed;
+}
+.form-phone .item-captcha {
+  margin-bottom: 10px;
+}
+.form-phone .item-pwd {
+  display: none;
+  margin-bottom: 10px;
+}
+.form-phone .item-pwd label {
+  left: 15px;
+}
+.form-phone .form-other {
+  width: 280px;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.form-phone .form-other span {
+  cursor: pointer;
+}
+.form-phone .form-other span:hover {
+  color: blue;
+}
+.form-phone .form-other .remember {
+  display: flex;
+  align-items: center;
+  visibility: hidden;
+}
+.form-phone .form-other #rememberPwd {
+  width: 15px;
+  height: 15px;
+  margin-left: 10px;
+}
+.form-phone input:focus {
+  border-color: #C20C0C !important;
+}
+.form-phone .login {
+  width: 280px;
+  height: 38px;
+  background-color: #C20C0C;
+  color: #fff;
+  border-radius: 19px;
+  display: block;
+  cursor: pointer;
+}
+.form-phone .login:hover {
+  opacity: 0.7;
+}
+.form-item input:focus + label span {
+  transform: translateY(-30px);
+  transition: 0.3s cubic-bezier(0.68, 0.55, 0.265, 1.55);
+}
+.form-qr {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 100%;
+  transition: 0.5s;
+  padding: 40px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.form-qr img {
+  width: 125px;
+  height: 220px;
+}
+.form-qr .qr-box {
+  width: 200px;
+  height: 220px;
+}
+.form-qr .qr-box .title {
+  text-align: center;
+  height: 25px;
+  line-height: 25px;
+  font-size: 18px;
+}
+.form-qr .qr-box .qr-canvas {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.form-qr .qr-box .qr-canvas .canvas-tips {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.843);
+  width: 140px;
+  height: 160px;
+  display: none;
+}
+.form-qr .qr-box .qr-canvas .canvas-tips .qr-text {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 3px 6px;
+  color: black;
+}
+.form-qr .qr-box .qr-canvas .canvas-tips button {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-48%);
+  width: 80px;
+  padding: 5px 10px;
+  color: #fff;
+  cursor: pointer;
+  background-color: #12b936;
+}
+.form-qr .qr-box .tips {
+  text-align: center;
+}
+.form-qr .qr-box .tips span {
+  color: #C20C0C;
+}

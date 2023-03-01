@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>网易云登录</title>
+    <link
+      rel="icon"
+      href="https://img2.baidu.com/it/u=940459549,1940541638&fm=253&fmt=auto&app=138&f=PNG?w=500&h=500"
+    />
+    <link rel="stylesheet" href="../config/layui/css/layui.css" />
+    <link rel="stylesheet" href="../styles/pages/login.css" />
+  </head>
+  <body>
+    <h1 class="center">网易云音乐</h1>
+
+    <div class="main center">
+      <div class="title">
+        <span class="activeTitle">手机号登录</span>
+        <span class="">扫码登录</span>
+      </div>
+
+      <div class="form-box">
+        <form class="form-phone">
+          <div class="form-item center">
+            <div class="layui-btn-container">
+              <button class="layui-btn layui-btn-primary demo1">
+                <span class="qh">+86</span>
+                <i class="layui-icon layui-icon-down layui-font-12"></i>
+              </button>
+            </div>
+            <input type="text" class="phone-ipt" />
+            <label class="phone-label" for="">请输入手机号码</label>
+          </div>
+          <div class="form-item item-captcha center">
+            <input type="text" class="qr-ipt" />
+            <label class="qr-label" for="">请输入验证码</label>
+            <button class="get-qr">获取验证码</button>
+          </div>
+          <div class="form-item item-pwd center">
+            <input class="pwd-ipt" type="password" />
+            <label class="pwd-label" for="">请输入密码</label>
+          </div>
+          <div class="form-other center">
+            <span>密码登录</span>
+            <div class="remember">
+              <label for="rememberPwd">记住密码</label>
+              <input type="checkbox" id="rememberPwd" />
+            </div>
+          </div>
+
+          <button class="login center">登录</button>
+        </form>
+        <div class="form-qr">
+          <img src="../assets/img/qr-tips.png" alt="" />
+          <div class="qr-box">
+            <p class="title">扫码登录</p>
+            <div class="qr-canvas">
+              <canvas
+                id="myCanvas"
+                style="width: 140px; height: 160px"
+              ></canvas>
+              <div class="canvas-tips">
+                <span class="qr-text"></span>
+                <button class="refresh-qr">点击刷新</button>
+              </div>
+            </div>
+            <p class="tips">使用 <span>网易云音乐APP</span> 扫码登录</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="toRegister">
+        <a href="./register.html">没有账号? 免费注册</a>
+      </div>
+      <img class="qr" src="../assets/img/qr.png" alt="" />
+    </div>
+
+    <script src="../config/layui/layui.js"></script>
+    <script src="../config/jquery.min.js"></script>
+    <script src="../config/axios.min.js"></script>
+    <script src="../config/md5.min.js"></script>
+    <script src="../js/login.js" type="module"></script>
+  </body>
+</html>

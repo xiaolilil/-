@@ -1,0 +1,146 @@
+@import '../global/normalize.css';
+:root {
+  --green-bg: #3eb874;
+  --menu-bg: #f9f9f9;
+  --dark-header-bg: #202023;
+  --theme-bg: #585e6b;
+  --dark-active-color: #b82525;
+  --dark-text-color: #ccc;
+  --dark-main-color: #fff;
+}
+body {
+  background-color: #2d2d2d;
+}
+h1 {
+  width: 400px;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  font-size: 55px;
+  letter-spacing: 5px;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(to right, red, #f50, #0fa, magenta, #c4f);
+}
+.main {
+  width: 450px;
+  height: 420px;
+  margin-top: 50px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #ddd;
+  position: relative;
+}
+.main h2 {
+  text-align: center;
+  line-height: 60px;
+  color: #c4f;
+  font-size: 23px;
+  letter-spacing: 6px;
+  border-bottom: 1px solid #999;
+}
+.main .form {
+  width: 100%;
+  height: 350px;
+  padding-top: 20px;
+}
+.main .form .form-item {
+  width: 280px;
+  height: 38px;
+  margin-bottom: 23px;
+  position: relative;
+}
+.main .form .item-phone {
+  display: flex;
+}
+.main .form .item-phone input {
+  width: 190px;
+  border-radius: 0 19px 19px 0;
+}
+.main .form .item-phone label {
+  left: 105px;
+}
+.main .form .item-captcha {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.main .form .item-captcha input {
+  width: 150px;
+}
+.main .form .item-captcha .get-captcha {
+  width: 100px;
+  height: 38px;
+}
+.main .form .item-captcha .not-allow {
+  cursor: not-allowed;
+}
+.main .form .register {
+  width: 280px;
+  display: block;
+}
+.main .toLogin {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+.main .toLogin:hover {
+  text-decoration: underline;
+  color: blue;
+}
+button {
+  cursor: pointer;
+  height: 38px;
+  border-radius: 19px;
+  background-color: #C20C0C;
+  color: #fff;
+}
+button:hover {
+  opacity: 0.7;
+}
+input {
+  width: 280px;
+  height: 38px;
+  padding-left: 12px;
+  z-index: 1;
+  background-color: transparent;
+  border: 1px solid #999;
+  border-radius: 19px;
+}
+input:focus {
+  border-color: #C20C0C;
+}
+label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  display: flex;
+}
+label span {
+  color: cornflowerblue;
+  min-width: 5px;
+  transition: 0.3s cubic-bezier(0.68, 0.55, 0.265, 1.55);
+  transform: translateY(0);
+}
+label .haveVal {
+  transform: translateY(-30px);
+}
+.form-item input:focus + label span {
+  transform: translateY(-30px);
+  transition: 0.3s cubic-bezier(0.68, 0.55, 0.265, 1.55);
+}
+.layui-btn-container .layui-btn {
+  margin: 0;
+  border-right: none;
+  border-radius: 19px 0 0 19px;
+}
+.qh {
+  display: inline-block;
+  width: 35px;
+}
+label {
+  color: cornflowerblue;
+}

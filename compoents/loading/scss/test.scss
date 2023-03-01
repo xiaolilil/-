@@ -1,0 +1,1558 @@
+// @import 'compass/css3';
+
+$d: 5em;
+$n: 12;
+$m: 5;
+$t: 1s;
+
+@function vrepeat($val, $n: 12) {
+	$list: ();
+	
+	@for $i from 0 to $n {
+		$list: $list, $val
+	}
+	
+	@return $list
+}
+
+@function rainbow($n: 12, $sat: 100%, $lum: 50%, $o: 0) {
+	$ba: 360deg/$n;
+	$c-list: from ($o - .5)*$ba;
+	
+	@for $i from 0 to $n {
+		$c-list: $c-list, 
+			HSL($i*$ba, $sat, $lum) 
+			if($i > 0, 0, unquote('')) 
+			if($i < $n - 1, ($i + 1)*$ba, unquote(''))
+	}
+	
+	@return $c-list
+}
+
+@function bars($n: 12, $bar-w: .05*$d, $a: 0) {
+	$n: $n - $n%2;
+	$ba: 360deg/$n;
+	$g-list: ();
+	$m: .5*$n;
+	$o: .5*$bar-w;
+	
+	@for $i from 0 to $n {
+		$g-list: $g-list, 
+			linear-Gradient(($i + $a)*$ba, 
+					transparent calc(50% - #{$o} - 1px), 
+					red calc(50% - #{$o}) calc(50% + #{$o}), 
+					transparent calc(50% - #{$o} + 1px))
+	}
+	
+	@return $g-list
+}
+
+@function dots($n: 12, $ro: .5*$d) {
+	$ba: 360deg/$n;
+	$rd: $ro*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: $ro - $rd;
+	$g-list: ();
+	
+	@for $i from 0 to $n {
+		$ca: $i*$ba;
+		$x: calc(50% + #{$rp*cos($ca)});
+		$y: calc(50% + #{$rp*sin($ca)});
+		$g-list: $g-list, 
+			radial-Gradient(#{circle at $x $y}, 
+					red calc(#{$rd} - 2px), transparent calc(#{$rd} - 1px))
+	}
+	
+	@return $g-list
+}
+
+@function base-steps($n: 12, $m: $n, $a-ani: 0) {
+	$ba: 360deg/$n;
+	$s-list: ();
+	
+	@for $i from 0 to $m {
+		$s-list: $s-list, 
+			RGBA(0, 0, 0, if($a-ani > 0, var(--alpha#{$i}), $i/($m - 1))) 
+			if($i > 0, ($n - $m)*$ba, unquote('')) 
+			if($i < $m - 1, ($n - $m + $i + 1)*$ba, unquote(''))
+	}
+	
+	@return $s-list
+}
+
+@function alpha-ani($n: 12) {
+	$a-list: ();
+	
+	@for $i from 0 to $n {
+		$a-list: $a-list, alpha#{$i} $t steps(1) ($i/$n - 1)*.5*$t infinite alternate
+	}
+	
+	@return $a-list
+}
+
+@property --hue {
+	syntax: '<angle>';
+	initial-value: 0deg;
+	inherits: true
+}
+
+@property --a {
+	syntax: '<angle>';
+	initial-value: 0deg;
+	inherits: true
+}
+
+@for $i from 0 to 12 {
+	@property --alpha#{$i} {
+		syntax: '<number>';
+		initial-value: 0;
+		inherits: true
+	}
+}
+
+body {
+	box-sizing: border-box;
+	display: grid;
+	grid-gap: 2em;
+	grid-template-columns: repeat(auto-fill, $d);
+	place-content: center;
+	margin: 0;
+	padding: 2em;
+	min-height: 100vh;
+	background: repeating-linear-Gradient(45deg, 
+			#131313 0 2px, #000 0 7px)
+}
+
+header {
+	grid-column: 1/ -1;
+	color: #eee;
+	font: 1em/ 1.375 segoe script, purisa, comic sans ms, cursive;
+	text-align: center;
+}
+
+h3 { font-size: 2em }
+
+small { display: block; font-style: italic; font-size: .375em; font-weight: normal; }
+
+.load {
+	position: relative;
+	width: $d; height: $d;
+	border-radius: 50%;
+	clip-path: circle(calc(50% - 1px)); /* fix for non-high dpi browsers */
+	mask: var(--mask);
+	
+	&::before, &::after {
+		position: absolute;
+		top: 0; right: 0; bottom: 0; left: 0;
+		border-radius: inherit;
+		mask: var(--mask);
+	}
+}
+
+#load-1 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)}), 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, intersect, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-2 {
+	background: rgba(#fff, .2);
+	--mask: 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-3 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)}), 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, intersect, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-4 {
+	background: rgba(#fff, .2);
+	--mask: 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-5 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)}), 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, intersect, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani()
+}
+
+#load-6 {
+	background: rgba(#fff, .2);
+	--mask: 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+#load-7 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), #{base-steps($n)}), 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n + 1);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-8 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n + 1);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-9 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), #{base-steps($n, $m)}), 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n + 1);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-10 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n + 1);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), #{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-11 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), 
+				#{base-steps($n, $a-ani: 1)}), 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n + 1);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani()
+}
+
+#load-12 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n + 1);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), #{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+#load-13 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)}), 
+		#{dots($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-14 {
+	background: rgba(#fff, .2);
+	--mask: #{dots($n)};
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-15 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)}), 
+		#{dots($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-16 {
+	background: rgba(#fff, .2);
+	--mask: #{dots($n)};
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-17 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)}), 
+		#{dots($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani()
+}
+
+#load-18 {
+	background: rgba(#fff, .2);
+	--mask: #{dots($n)};
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+#load-19 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), #{base-steps($n)}), 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-20 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-21 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), #{base-steps($n, $m)}), 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-22 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), #{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-23 {
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), 
+				#{base-steps($n, $a-ani: 1)}), 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani()
+}
+
+#load-24 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), #{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+#load-25 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	background: 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 0, 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 0, 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 100%, 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 100%;
+	background-repeat: no-repeat;
+	background-size: 2*$rx 2*$ry, 2*$ry 2*$rx;
+	--c: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)});
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before, &:after {
+		transform: rotate(var(--az, 30deg));
+		background: inherit;
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-26 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	background: 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 0, 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 0, 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 100%, 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 100%;
+	background-repeat: no-repeat;
+	background-size: 2*$rx 2*$ry, 2*$ry 2*$rx;
+	--c: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)});
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before, &:after {
+		transform: rotate(var(--az, 30deg));
+		background: inherit;
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-27 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	background: 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 0, 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 0, 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 100%, 
+		radial-Gradient(var(--c) calc(69% - 1px), 
+				transparent 69%) 100%;
+	background-repeat: no-repeat;
+	background-size: 2*$rx 2*$ry, 2*$ry 2*$rx;
+	--c: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)});
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&::before, &:after {
+		transform: rotate(var(--az, 30deg));
+		background: inherit;
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-28 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	background: 
+		radial-Gradient(at 50% 100%, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 0, 
+		radial-Gradient(at 100% 50%, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 0, 
+		radial-Gradient(at 50% 0, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 100%, 
+		radial-Gradient(at 0 50%, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 100%;
+	background-repeat: no-repeat;
+	background-size: 2*$rx $ry, $ry 2*$rx;
+	--c: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)});
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before, &:after {
+		transform: rotate(var(--az, 30deg));
+		background: inherit;
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-29 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	background: 
+		radial-Gradient(at 50% 100%, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 0, 
+		radial-Gradient(at 100% 50%, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 0, 
+		radial-Gradient(at 50% 0, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 100%, 
+		radial-Gradient(at 0 50%, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 100%;
+	background-repeat: no-repeat;
+	background-size: 2*$rx $ry, $ry 2*$rx;
+	--c: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)});
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before, &:after {
+		transform: rotate(var(--az, 30deg));
+		background: inherit;
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-30 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	background: 
+		radial-Gradient(at 50% 100%, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 0, 
+		radial-Gradient(at 100% 50%, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 0, 
+		radial-Gradient(at 50% 0, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 50% 100%, 
+		radial-Gradient(at 0 50%, 
+				var(--c) calc(69% - 1px), 
+				transparent 69%) 100%;
+	background-repeat: no-repeat;
+	background-size: 2*$rx $ry, $ry 2*$rx;
+	--c: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)});
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&::before, &:after {
+		transform: rotate(var(--az, 30deg));
+		background: inherit;
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-31 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)}), 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: intersect, exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-32 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-33 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)}), 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: intersect, exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-34 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-35 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: HSL(var(--hue, 0deg), 85%, 65%);
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)}), 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: intersect, exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani()
+}
+
+#load-36 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&::before {
+		background: HSL(var(--hue, 0deg), 85%, 65%);
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+#load-37 {
+	$n: 12;
+	background: conic-Gradient(rainbow($n, 85%, 65%));
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)}), 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, intersect, vrepeat(add, $n);
+	animation: a $t steps($n) infinite
+}
+
+#load-38 {
+	$n: 12;
+	background: rgba(#fff, .2);
+	--mask: 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 100%, 35%));
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-39 {
+	$n: 12;
+	$m: 5;
+	background: conic-Gradient(rainbow($n, 85%, 65%));
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)}), 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, intersect, vrepeat(add, $n);
+	animation: a $t steps($n) infinite;
+}
+
+#load-40 {
+	$n: 12;
+	$m: 5;
+	background: rgba(#fff, .2);
+	--mask: 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 100%, 35%));
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-41 {
+	background: conic-Gradient(rainbow($n, 100%, 35%));
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)}), 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, intersect, vrepeat(add, $n);
+	animation: alpha-ani()
+}
+
+#load-42 {
+	background: rgba(#fff, .2);
+	--mask: 
+		radial-Gradient(transparent #{.25*$d}, red 0), 
+		#{bars($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: alpha-ani();
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 100%, 35%));
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+#load-43 {
+	background: conic-Gradient(rainbow($n, 85%, 65%, .5));
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), #{base-steps($n)}), 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n + 1);
+	animation: a $t steps($n) infinite
+}
+
+#load-44 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n + 1);
+	animation: a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 100%, 35%, .5));
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-45 {
+	background: conic-Gradient(rainbow($n, 100%, 35%, .5));
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), #{base-steps($n, $m)}), 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n + 1);
+	animation: a $t steps($n) infinite
+}
+
+#load-46 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n + 1);
+	animation: a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 100%, 35%, .5));
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), #{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-47 {
+	background: conic-Gradient(rainbow($n, 100%, 35%, .5));
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), 
+				#{base-steps($n, $a-ani: 1)}), 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n + 1);
+	animation: alpha-ani()
+}
+
+#load-48 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		radial-Gradient(red #{.25*$d}, transparent 0), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n + 1);
+	animation: alpha-ani();
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 100%, 35%, .5));
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), #{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+#load-49 {
+	background: conic-Gradient(rainbow($n, 85%, 65%));
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)}), 
+		#{dots($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: a $t steps($n) infinite
+}
+
+#load-50 {
+	background: rgba(#fff, .2);
+	--mask: #{dots($n)};
+	animation: a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 85%, 65%));
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-51 {
+	background: conic-Gradient(rainbow($n, 85%, 65%));
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)}), 
+		#{dots($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: a $t steps($n) infinite
+}
+
+#load-52 {
+	background: rgba(#fff, .2);
+	--mask: #{dots($n)};
+	animation: a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 85%, 65%));
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-53 {
+	background: conic-Gradient(rainbow($n, 85%, 65%));
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)}), 
+		#{dots($n)};
+	mask-composite: intersect, vrepeat(add, $n);
+	animation: alpha-ani()
+}
+
+#load-54 {
+	background: rgba(#fff, .2);
+	--mask: 
+		#{dots($n)};
+	animation: alpha-ani();
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 85%, 65%));
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+#load-55 {
+	background: conic-Gradient(rainbow($n, 85%, 65%, .5));
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), #{base-steps($n)}), 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n);
+	animation: a $t steps($n) infinite
+}
+
+#load-56 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n);
+	animation: a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 85%, 65%, .5));
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-57 {
+	background: conic-Gradient(rainbow($n, 85%, 65%, .5));
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), #{base-steps($n, $m)}), 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n);
+	animation: a $t steps($n) infinite
+}
+
+#load-58 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n);
+	animation: a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 85%, 65%, .5));
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), #{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-59 {
+	background: conic-Gradient(rainbow($n, 85%, 65%, .5));
+	--mask: 
+		conic-Gradient(from var(--a, 0deg), 
+				#{base-steps($n, $a-ani: 1)}), 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: intersect, exclude, vrepeat(add, $n);
+	animation: alpha-ani()
+}
+
+#load-60 {
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-Gradient(red, red), 
+		#{bars($n, 2px)};
+	mask-composite: exclude, vrepeat(add, $n);
+	animation: alpha-ani();
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 85%, 65%, .5));
+		--mask: 
+			conic-Gradient(from var(--a, 0deg), #{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+#load-61 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	--az: 0deg;
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)});
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&, &::before, &::after {
+		background: 
+			radial-Gradient(HSL(var(--az), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 0, 
+			radial-Gradient(HSL(calc(var(--az) + #{3*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 100%, 
+			radial-Gradient(HSL(calc(var(--az) + #{6*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 100%, 
+			radial-Gradient(HSL(calc(var(--az) + #{9*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 0;
+		background-repeat: no-repeat;
+		background-size: 2*$rx 2*$ry, 2*$ry 2*$rx;
+	}
+	
+	&::before, &:after {
+		--az: 30deg;
+		transform: rotate(var(--az));
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-62 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	--az: 0deg;
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)});
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&, &::before, &::after {
+		background: 
+			radial-Gradient(HSL(var(--az), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 0, 
+			radial-Gradient(HSL(calc(var(--az) + #{3*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 100%, 
+			radial-Gradient(HSL(calc(var(--az) + #{6*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 100%, 
+			radial-Gradient(HSL(calc(var(--az) + #{9*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 0;
+		background-repeat: no-repeat;
+		background-size: 2*$rx 2*$ry, 2*$ry 2*$rx;
+	}
+	
+	&::before, &:after {
+		--az: 30deg;
+		transform: rotate(var(--az));
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-63 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	--az: 0deg;
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)});
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&, &::before, &::after {
+		background: 
+			radial-Gradient(HSL(var(--az), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 0, 
+			radial-Gradient(HSL(calc(var(--az) + #{3*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 100%, 
+			radial-Gradient(HSL(calc(var(--az) + #{6*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 100%, 
+			radial-Gradient(HSL(calc(var(--az) + #{9*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 0;
+		background-repeat: no-repeat;
+		background-size: 2*$rx 2*$ry, 2*$ry 2*$rx;
+	}
+	
+	&::before, &:after {
+		--az: 30deg;
+		transform: rotate(var(--az));
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-64 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	--az: 0deg;
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)});
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&, &::before, &::after {
+		background: 
+			radial-Gradient(at 50% 100%, 
+					HSL(var(--az), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 0, 
+			radial-Gradient(at 0 50%, 
+					HSL(calc(var(--az) + #{3*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 100%, 
+			radial-Gradient(at 50% 0, 
+					HSL(calc(var(--az) + #{6*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 100%, 
+			radial-Gradient(at 100% 50%, 
+					HSL(calc(var(--az) + #{9*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 0;
+		background-repeat: no-repeat;
+		background-size: 2*$rx $ry, $ry 2*$rx;
+	}
+	
+	&::before, &:after {
+		--az: 30deg;
+		transform: rotate(var(--az, 30deg));
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-65 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	--az: 0deg;
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)});
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&, &::before, &::after {
+		background: 
+			radial-Gradient(at 50% 100%, 
+					HSL(var(--az), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 0, 
+			radial-Gradient(at 0 50%, 
+					HSL(calc(var(--az) + #{3*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 100%, 
+			radial-Gradient(at 50% 0, 
+					HSL(calc(var(--az) + #{6*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 100%, 
+			radial-Gradient(at 100% 50%, 
+					HSL(calc(var(--az) + #{9*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 0;
+		background-repeat: no-repeat;
+		background-size: 2*$rx $ry, $ry 2*$rx;
+	}
+	
+	&::before, &:after {
+		--az: 30deg;
+		transform: rotate(var(--az, 30deg));
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-66 {
+	$ba: 360deg/12;
+	$rx: .375*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$ry: 2*$rx;
+	--az: 0deg;
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)});
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&, &::before, &::after {
+		background: 
+			radial-Gradient(at 50% 100%, 
+					HSL(var(--az), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 0, 
+			radial-Gradient(at 0 50%, 
+					HSL(calc(var(--az) + #{3*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 100%, 
+			radial-Gradient(at 50% 0, 
+					HSL(calc(var(--az) + #{6*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 50% 100%, 
+			radial-Gradient(at 100% 50%, 
+					HSL(calc(var(--az) + #{9*$ba}), 85%, 65%) calc(69% - 1px), 
+					transparent 69%) 0;
+		background-repeat: no-repeat;
+		background-size: 2*$rx $ry, $ry 2*$rx;
+	}
+	
+	&::before, &:after {
+		--az: 30deg;
+		transform: rotate(var(--az, 30deg));
+		mask: none;
+		content: ''
+	}
+	
+	&::after { --az: -30deg }
+}
+
+#load-67 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: conic-Gradient(rainbow($n, 85%, 65%));
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n)}), 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: intersect, exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-68 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 85%, 65%));
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n)});
+		content: ''
+	}
+}
+
+#load-69 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: conic-Gradient(rainbow($n, 85%, 65%));
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $m)}), 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: intersect, exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite
+}
+
+#load-70 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		a $t steps($n) infinite;
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 85%, 65%));
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $m)});
+		content: ''
+	}
+}
+
+#load-71 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: conic-Gradient(rainbow($n, 85%, 65%));
+	--mask: 
+		conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+				#{base-steps($n, $a-ani: 1)}), 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: intersect, exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani()
+}
+
+#load-72 {
+	$ba: 360deg/$n;
+	$rd: .5*$d*tan(.5*$ba)/(1 + tan(.5*$ba));
+	$rp: .5*$d - $rd;
+	background: rgba(#fff, .2);
+	--mask: 
+		linear-gradient(red, red), 
+		#{bars($n, 2px, .5)}, 
+		linear-gradient(red, red), 
+		radial-Gradient(red #{$rp}, transparent 0), 
+		#{dots($n)};
+	mask-composite: exclude, vrepeat(add, $n), exclude, add, vrepeat(add, $n);
+	animation: 
+		hue $n*$t linear infinite, 
+		alpha-ani();
+	
+	&::before {
+		background: conic-Gradient(rainbow($n, 85%, 65%));
+		--mask: 
+			conic-Gradient(from calc(var(--a, 0deg) - #{.5*360deg/$n}), 
+					#{base-steps($n, $a-ani: 1)});
+		content: ''
+	}
+}
+
+@keyframes hue { to { --hue: 360deg } }
+
+@keyframes a { to { --a: 360deg } }
+
+@for $i from 0 to $n {
+	@keyframes alpha#{$i} { 50% { --alpha#{$i}: 1 } }
+}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles//layout/header.css" />
+    <link
+      rel="stylesheet"
+      href="//at.alicdn.com/t/c/font_3788370_txtrf7k8igo.css"
+    />
+  </head>
+  <body>
+    <!-- h5新增的语义化标签  -->
+    <header class="theme-green">
+      <div class="header-box center">
+        <div class="header-left">
+          <ul class="header-operate">
+            <li><i class="iconfont icon-shouye"></i></li>
+            <li><i class="iconfont icon-suoxiao"></i></li>
+            <li><i class="iconfont icon-fangda"></i></li>
+          </ul>
+
+          <div class="header-go-back">
+            <i class="iconfont icon-jiantou_xiangzuo"></i>
+            <i class="iconfont icon-jiantou_xiangyou"></i>
+          </div>
+
+          <div class="header-search">
+            <input type="text" class="search-ipt" placeholder="请输入内容" />
+            <i class="iconfont icon-sousuo"></i>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="control">
+            <button class="login">登录</button>
+          </div>
+          <i class="iconfont icon-pifuzhuti"></i>
+        </div>
+      </div>
+    </header>
+
+    <script src="../config/jquery.min.js"></script>
+    <script type="module">
+      import { debounce, postMsg } from "../utils/utils.js";
+      import { removeClass, addClass } from "../utils/setClass.js";
+      import { getCache, removeCache } from "../utils/cache.js";
+      window.onload = () => {
+        const user_info = getCache("wyy-profile");
+        // 登录后 显示用户头像
+        if (user_info.avatarUrl != "") {
+          $(".control").html(`
+            <img src="${user_info.avatarUrl}"  alt="">
+            `);
+        } else {
+          $(".control").html(`
+            <img src="https://img2.baidu.com/it/u=3202947311,1179654885&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500" alt="">
+            `);
+        }
+      };
+
+      // 点击主体图标动画类名
+      $(".icon-pifuzhuti").click(() => {
+        postMsg("show-theme");
+        $(".icon-pifuzhuti").addClass("move");
+        setTimeout(() => {
+          $(".icon-pifuzhuti").removeClass("move");
+        }, 150);
+      });
+
+      // 点击去首页
+      $(".icon-shouye").click(() => {
+        postMsg("toHome");
+      });
+      // 传递数据给父页面 父页面调用放大页面的函数
+      $(".icon-fangda").click(() => {
+        postMsg("isEnlarge");
+      });
+      // 传递数据给父页面 父页面调用缩小页面的函数
+      $(".icon-suoxiao").click(() => {
+        postMsg("isNarrow");
+      });
+
+      $(".login").click(() => {
+        postMsg("toLogin");
+      });
+
+      const is = $(".header-go-back .iconfont");
+      is[0].onclick = () => {
+        postMsg("back");
+      };
+      is[1].onclick = () => {
+        postMsg("forward");
+      };
+
+      $(".header-search").focusin(() => {
+        const val = $(".header-search input").val();
+        postMsg("isFocus");
+        // 如果输入框没有值 默认搜索热搜列表数据
+        if (val == "") {
+          postMsg("hot-search");
+        } else {
+          // 输入框有值 搜索输入的相关数据
+          postMsg({ keywords: val });
+        }
+      });
+
+      $("body").click(e => {
+        // 点击的元素不是输入框 隐藏元素
+        if (e.target.className != "search-ipt") {
+          postMsg("search-fadeOut");
+        }
+      });
+
+      // 输入框失去焦点 隐藏元素
+      $(".search-ipt").blur(() => {
+        postMsg("search-fadeOut");
+      });
+
+      // 输入框输入的时候 那输入的内容 传递给父页面
+      const iptEl = document.querySelector(".search-ipt");
+      // 加入防抖函数 输入间隔1秒钟才会发送
+      iptEl.oninput = debounce(function () {
+        const val = $(".header-search input").val();
+        // 如果输入框的值是空字符串， 则获取热搜数据 反之获取关键字的数据
+        val == "" ? postMsg("hot-search") : postMsg({ keywords: val });
+      }, 1000);
+
+      function changeTheme(theme) {
+        if (theme == "green") {
+          removeClass("theme-dark");
+          addClass("header", "tneme-green");
+        }
+        if (theme == "dark") {
+          removeClass("theme-green");
+          addClass("header", "tneme-dark");
+        }
+      }
+
+      // 获取父页面传递来的数据
+      window.addEventListener("message", function (e) {
+        // 结构出想要的数据
+        const { data } = e;
+        // console.log("data", data);
+        if (data == "green") {
+          removeClass("theme-dark");
+          addClass("header", "theme-green");
+        } else if (data == "dark") {
+          removeClass("theme-green");
+          addClass("header", "theme-dark");
+        }
+      });
+
+      // 点击搜索歌曲
+      $(".icon-sousuo").click(() => {
+        const val = $(".header-search input").val();
+        postMsg({ clickSearch: val });
+      });
+    </script>
+  </body>
+</html>
